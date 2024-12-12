@@ -2,19 +2,19 @@ import { siteConfig } from './lib/site-config'
 
 export default siteConfig({
   // the site's root Notion page (required)
-  rootNotionPageId: 'Jin-s-Dev-Notes-15a9b12b542a80708911d21e206aabda',
+  rootNotionPageId: '15a9b12b542a80708911d21e206aabda',
 
   // if you want to restrict pages to a single notion workspace (optional)
   // (this should be a Notion ID; see the docs for how to extract this)
   rootNotionSpaceId: null,
 
   // basic site info (required)
-  name: 'Next.js Notion Starter Kit',
-  domain: 'nextjs-notion-starter-kit.transitivebullsh.it',
-  author: 'Travis Fischer',
+  name: 'Jin\'s Dev Notes',
+  domain: 'blog.jinnotes.kr',
+  author: 'Yejin715',
 
   // open graph metadata (optional)
-  description: 'Example Next.js Notion Starter Kit Site',
+  description: 'Jin\'s Dev Notes',
 
   // social usernames (optional)
   // twitter: 'transitive_bs',
@@ -55,7 +55,7 @@ export default siteConfig({
   navigationLinks: [
     {
       title: 'About',
-      pageId: 'Yejin-Choi-15a9b12b542a8006bac1fa43203cef20'
+      pageId: '15a9b12b542a8006bac1fa43203cef20'
     },
     // {
     //   title: 'Contact',
