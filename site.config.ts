@@ -10,7 +10,7 @@ export default siteConfig({
 
   // basic site info (required)
   name: 'Jin\'s Dev Notes',
-  domain: 'blog.jinnotes.kr',
+  domain: 'jinnotes.vercel.app',
   author: 'Yejin715',
 
   // open graph metadata (optional)
@@ -61,5 +61,14 @@ export default siteConfig({
     //   title: 'Contact',
     //   pageId: '6a29ebcb935a4f0689fe661ab5f3b8d1'
     // }
-  ]
+  ],
+  giscus: {
+    repo: 'Yejin715/Notion_Blog',
+    repoId: 'R_kgDONciekg',
+    category: 'Comments',
+    categoryId: 'DIC_kwDONcieks4ClMEe',
+    mapping: 'pathname',
+    theme: 'light_tritanopia',
+    darkTheme: 'dark_dimmed'
+  }
 })

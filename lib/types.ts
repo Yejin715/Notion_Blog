@@ -2,6 +2,8 @@ import { type ParsedUrlQuery } from 'node:querystring'
 
 import { type ExtendedRecordMap, type PageMap } from 'notion-types'
 
+import { GiscusProps, Theme } from '@giscus/react'
+
 export * from 'notion-types'
 
 export type NavigationStyle = 'default' | 'custom'
@@ -74,4 +76,8 @@ export interface NotionPageInfo {
   author: string
   authorImage: string
   detail: string
+}
+
+export interface GiscusInfo extends GiscusProps {
+  darkTheme?: Theme
 }
