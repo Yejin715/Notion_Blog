@@ -1,6 +1,6 @@
 {
     "origins": [
-      "https://jinnotes.vercel.app/"
+      "https://jinnotes.vercel.app"
     ],
     "originsRegex": [
       "http://localhost:[0-9]+"
