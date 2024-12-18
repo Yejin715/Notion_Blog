@@ -19,10 +19,11 @@ export function Comment() {
         mapping={info.mapping}
         reactionsEnabled={info.reactionsEnabled || '1'}
         emitMetadata={info.emitMetadata || '0'}
-        inputPosition={info.inputPosition || 'bottom'}
+        inputPosition={info.inputPosition || 'top'}
         theme={isDarkMode ? info.darkTheme || info.theme : info.theme}
         lang={info.lang || 'ko'}
         loading={info.loading || 'lazy'}
+        crossorigin="anonymous"
       />
     )
   );

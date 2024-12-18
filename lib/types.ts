@@ -79,4 +79,5 @@ export interface NotionPageInfo {
 
 export interface GiscusInfo extends GiscusProps {
   darkTheme?: Theme
+  crossorigin?: string
 }
