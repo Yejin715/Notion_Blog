@@ -69,6 +69,7 @@ export default siteConfig({
     categoryId: 'DIC_kwDONcieks4ClMEe',
     mapping: 'pathname',
     theme: 'light_tritanopia',
-    darkTheme: 'dark_dimmed'
+    darkTheme: 'dark_dimmed',
+    crossorigin: 'anonymous'
   }
 })
