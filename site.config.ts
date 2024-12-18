@@ -10,7 +10,7 @@ export default siteConfig({
 
   // basic site info (required)
   name: 'Jin\'s Dev Notes',
-  domain: 'jinnotes.vercel.app',
+  domain: 'jinnotes.com',
   author: 'Yejin715',
 
   // open graph metadata (optional)
