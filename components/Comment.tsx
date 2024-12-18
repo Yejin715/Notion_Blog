@@ -23,7 +23,6 @@ export function Comment() {
         theme={isDarkMode ? info.darkTheme || info.theme : info.theme}
         lang={info.lang || 'ko'}
         loading={info.loading || 'lazy'}
-        crossorigin={info.crossorigin}
       />
     )
   );

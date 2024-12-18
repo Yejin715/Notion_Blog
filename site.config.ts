@@ -10,7 +10,7 @@ export default siteConfig({
 
   // basic site info (required)
   name: 'Jin\'s Dev Notes',
-  domain: 'jinnotes.com',
+  domain: 'jinnotes.vercel.app',
   author: 'Yejin715',
 
   // open graph metadata (optional)
@@ -69,7 +69,6 @@ export default siteConfig({
     categoryId: 'DIC_kwDONcieks4ClMEe',
     mapping: 'pathname',
     theme: 'light_tritanopia',
-    darkTheme: 'dark_dimmed',
-    crossorigin: 'anonymous'
+    darkTheme: 'dark_dimmed'
   }
 })
