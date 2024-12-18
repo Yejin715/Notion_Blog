@@ -19,7 +19,7 @@ export function Comment() {
         mapping={info.mapping}
         reactionsEnabled={info.reactionsEnabled || '1'}
         emitMetadata={info.emitMetadata || '0'}
-        inputPosition={info.inputPosition || 'top'}
+        inputPosition={info.inputPosition || 'bottom'}
         theme={isDarkMode ? info.darkTheme || info.theme : info.theme}
         lang={info.lang || 'ko'}
         loading={info.loading || 'lazy'}
