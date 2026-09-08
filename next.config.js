@@ -8,6 +8,13 @@ const withBundleAnalyzer = bundleAnalyzer({
 
 export default withBundleAnalyzer({
   staticPageGenerationTimeout: 300,
+
+  experimental: {
+    staticGenerationRetryCount: 3,
+    staticGenerationMaxConcurrency: 1,
+    staticGenerationMinPagesPerWorker: 100
+  },
+
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: 'www.notion.so' },
