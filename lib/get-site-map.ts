@@ -44,8 +44,10 @@ const getPage = async (pageId: string, ...args: any[]) => {
     const maxRetries = 4
 
     for (let attempt = 0; attempt <= maxRetries; attempt++) {
-      // 연속 요청 사이에 간격을 둔다.
-      await sleep(800)
+      // 재시도 시에만 간격을 두고, 첫 요청은 즉시 실행
+      if (attempt > 0) {
+        await sleep(500)
+      }
 
       try {
         console.log('\nnotion getPage', uuidToId(pageId))

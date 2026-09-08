@@ -30,8 +30,10 @@ async function getNotionPage(
     const maxRetries = 4
 
     for (let attempt = 0; attempt <= maxRetries; attempt++) {
-      // Notion 요청이 너무 빠르게 연속으로 나가지 않도록 간격 추가
-      await sleep(1000)
+      // 재시도 시에만 간격을 두고, 첫 요청은 즉시 실행
+      if (attempt > 0) {
+        await sleep(500)
+      }
 
       try {
         console.log('\nnotion page request', pageId)
