@@ -21,7 +21,10 @@ export async function getSiteMap(): Promise<types.SiteMap> {
   )
 
   return {
-    site: config.site,
+    site: {
+      ...config.site,
+      rootNotionSpaceId: config.rootNotionSpaceId ?? null
+    },
     ...partialSiteMap
   } as types.SiteMap
 }
