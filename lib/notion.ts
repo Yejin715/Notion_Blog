@@ -16,6 +16,69 @@ import { getTweetsMap } from './get-tweets'
 import { notion } from './notion-api'
 import { getPreviewImageMap } from './preview-images'
 
+const sleep = (ms: number) =>
+  new Promise((resolve) => setTimeout(resolve, ms))
+
+// 모든 Notion getPage 요청을 한 줄로 세워서 순차적으로 실행
+let notionRequestQueue: Promise<void> = Promise.resolve()
+
+async function getNotionPage(
+  pageId: string,
+  options?: Parameters<typeof notion.getPage>[1]
+): Promise<ExtendedRecordMap> {
+  const runRequest = async (): Promise<ExtendedRecordMap> => {
+    const maxRetries = 4
+
+    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+      // Notion 요청이 너무 빠르게 연속으로 나가지 않도록 간격 추가
+      await sleep(1000)
+
+      try {
+        console.log('\nnotion page request', pageId)
+
+        return await notion.getPage(pageId, options)
+      } catch (err: any) {
+        const status =
+          err?.response?.status ??
+          err?.status ??
+          err?.statusCode
+
+        const message = String(err?.message ?? err)
+
+        const isRateLimit =
+          status === 429 ||
+          message.includes('429') ||
+          message.includes('Too Many Requests')
+
+        if (!isRateLimit || attempt === maxRetries) {
+          throw err
+        }
+
+        // 429가 발생하면 3초 → 6초 → 12초 → 24초 대기
+        const delay = 3000 * 2 ** attempt
+
+        console.warn(
+          `Notion rate limit (429). Retrying in ${delay / 1000}s...`
+        )
+
+        await sleep(delay)
+      }
+    }
+
+    throw new Error(`Failed to load Notion page "${pageId}"`)
+  }
+
+  const result = notionRequestQueue.then(runRequest)
+
+  // 성공/실패 여부와 관계없이 다음 요청이 계속 실행될 수 있도록 큐 유지
+  notionRequestQueue = result.then(
+    () => undefined,
+    () => undefined
+  )
+
+  return result
+}
+
 const getNavigationLinkPages = pMemoize(
   async (): Promise<ExtendedRecordMap[]> => {
     const navigationLinkPageIds = (navigationLinks || [])
@@ -26,14 +89,14 @@ const getNavigationLinkPages = pMemoize(
       return pMap(
         navigationLinkPageIds,
         async (navigationLinkPageId) =>
-          notion.getPage(navigationLinkPageId, {
+          getNotionPage(navigationLinkPageId, {
             chunkLimit: 1,
             fetchMissingBlocks: false,
             fetchCollections: false,
             signFileUrls: false
           }),
         {
-          concurrency: 4
+          concurrency: 1
         }
       )
     }
@@ -43,7 +106,7 @@ const getNavigationLinkPages = pMemoize(
 )
 
 export async function getPage(pageId: string): Promise<ExtendedRecordMap> {
-  let recordMap = await notion.getPage(pageId)
+  let recordMap = await getNotionPage(pageId)
 
   if (navigationStyle !== 'default') {
     // ensure that any pages linked to in the custom navigation header have
