@@ -33,9 +33,64 @@ const getAllPages = pMemoize(getAllPagesImpl, {
   cacheKey: (...args) => JSON.stringify(args)
 })
 
-const getPage = async (pageId: string, ...args) => {
-  console.log('\nnotion getPage', uuidToId(pageId))
-  return notion.getPage(pageId, ...args)
+const sleep = (ms: number) =>
+  new Promise((resolve) => setTimeout(resolve, ms))
+
+// Notion API 요청을 하나씩 실행하기 위한 전역 큐
+let notionRequestQueue: Promise<void> = Promise.resolve()
+
+const getPage = async (pageId: string, ...args: any[]) => {
+  const runRequest = async () => {
+    const maxRetries = 4
+
+    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+      // 연속 요청 사이에 간격을 둔다.
+      await sleep(800)
+
+      try {
+        console.log('\nnotion getPage', uuidToId(pageId))
+
+        return await notion.getPage(pageId, ...args)
+      } catch (err: any) {
+        const status =
+          err?.response?.status ??
+          err?.status ??
+          err?.statusCode
+
+        const message = String(err?.message ?? err)
+
+        const isRateLimit =
+          status === 429 ||
+          message.includes('429') ||
+          message.includes('Too Many Requests')
+
+        if (!isRateLimit || attempt === maxRetries) {
+          throw err
+        }
+
+        const delay = 2000 * 2 ** attempt
+
+        console.warn(
+          `Notion rate limit (429). Retrying in ${delay / 1000}s...`
+        )
+
+        await sleep(delay)
+      }
+    }
+
+    throw new Error(`Failed to load Notion page "${pageId}"`)
+  }
+
+  // 앞선 요청이 끝날 때까지 기다린 뒤 현재 요청 실행
+  const result = notionRequestQueue.then(runRequest)
+
+  // 현재 요청이 성공하든 실패하든 다음 요청이 이어질 수 있도록 큐 유지
+  notionRequestQueue = result.then(
+    () => undefined,
+    () => undefined
+  )
+
+  return result
 }
 
 async function getAllPagesImpl(
